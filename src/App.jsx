@@ -134,7 +134,7 @@ function App() {
         dispatch({ type: "WALLBOOTED" });
       }, 5000);
     }
-  });
+  }, [dispatch]);
 
   return (
     <div className="App">
