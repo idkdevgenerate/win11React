@@ -15,7 +15,7 @@ const config = ({ mode }) => {
       "process.env.NODE_ENV": `"${mode}"`,
     },
     build: {
-      outDir: "build",
+      outDir: "dist",
       rollupOptions: {
         output: {
           manualChunks: (id) => {

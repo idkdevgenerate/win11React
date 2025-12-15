@@ -6,6 +6,7 @@ import { installApp, delApp } from "../../../actions";
 
 import { Icon, ToolBar } from "../../../utils/general";
 import dirs from "./assets/dir.json";
+import apps from "../../../utils/apps";
 
 export const WnTerminal = () => {
   const wnapp = useSelector((state) => state.apps.terminal);
@@ -309,6 +310,7 @@ export const WnTerminal = () => {
         "ECHO           Displays messages, or turns command echoing on or off.",
         "EXIT           Quits the CMD.EXE program (command interpreter).",
         "HELP           Provides Help information for Windows commands.",
+        "LS             Lists applications (use: ls apps).",
         "START          Starts a separate window to run a specified program or command.",
         "SYSTEMINFO     Displays machine specific properties and configuration.",
         "TIME           Displays or sets the system time.",
@@ -325,6 +327,55 @@ export const WnTerminal = () => {
         tmpStack.push(helpArr[i]);
       }
     } else if (type == "") {
+    } else if (type == "ls") {
+      if (arg.toLowerCase() == "apps") {
+        tmpStack.push("Installed Applications:");
+        tmpStack.push("========================");
+        tmpStack.push("");
+
+        // Get installed apps from localStorage
+        var installedApps = JSON.parse(localStorage.getItem("installed") || "[]");
+
+        // System apps (built-in)
+        tmpStack.push("System Apps:");
+        tmpStack.push("-----------");
+        var systemApps = apps.filter(app => app.type === "app");
+        for (var i = 0; i < systemApps.length; i++) {
+          var appEntry = systemApps[i].name;
+          if (systemApps[i].action) {
+            appEntry += " [" + systemApps[i].action + "]";
+          } else {
+            appEntry += " [placeholder]";
+          }
+          tmpStack.push("  " + appEntry);
+        }
+
+        tmpStack.push("");
+        tmpStack.push("System Actions:");
+        tmpStack.push("---------------");
+        var actionApps = apps.filter(app => app.type === "action");
+        for (var i = 0; i < actionApps.length; i++) {
+          tmpStack.push("  " + actionApps[i].name + " [" + actionApps[i].action + "]");
+        }
+
+        tmpStack.push("");
+        tmpStack.push("User Installed Apps:");
+        tmpStack.push("--------------------");
+        if (installedApps.length === 0) {
+          tmpStack.push("  (none)");
+        } else {
+          for (var i = 0; i < installedApps.length; i++) {
+            var userApp = installedApps[i];
+            tmpStack.push("  " + userApp.name + (userApp.data && userApp.data.url ? " [" + userApp.data.url + "]" : ""));
+          }
+        }
+
+        tmpStack.push("");
+        tmpStack.push("Total: " + apps.length + " apps registered");
+      } else {
+        tmpStack.push("Usage: ls apps");
+        tmpStack.push("  apps    List all installed applications");
+      }
     } else if (type == "ipconfig") {
       const IP = IpDetails[0];
       tmpStack.push("Windows IP Configuration");
