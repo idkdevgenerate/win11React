@@ -28,6 +28,15 @@ const fileReducer = (state = defState, action) => {
     }
   } else if (action.type === "FILEVIEW") {
     tmp.view = action.payload;
+  } else if (action.type === "FILEDEL") {
+    // Delete a file or folder
+    var itemToDelete = tmp.data.getId(action.payload);
+    if (itemToDelete && itemToDelete.host) {
+      var parent = itemToDelete.host;
+      if (parent.data) {
+        parent.data = parent.data.filter(item => item.id !== action.payload);
+      }
+    }
   } else if (action.type === "FILEPREV") {
     tmp.hid--;
     if (tmp.hid < 0) tmp.hid = 0;

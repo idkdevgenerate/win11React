@@ -47,13 +47,6 @@ const apps = [
     action: "MSEDGE",
   },
   {
-    name: "Buy me a coffee",
-    icon: "buyme",
-    type: "app",
-    action: "EXTERNAL",
-    payload: "https://www.buymeacoffee.com/blueedgetechno",
-  },
-  {
     name: "Store",
     icon: "store",
     type: "app",
@@ -65,7 +58,7 @@ const apps = [
     type: "app",
   },
   {
-    name: "Blue",
+    name: "Admin",
     icon: "win/user",
     type: "app",
     action: "EXPLORER",
@@ -227,13 +220,6 @@ const apps = [
     type: "app",
   },
   {
-    name: "Twitter",
-    icon: "twitter",
-    type: "app",
-    action: "EXTERNAL",
-    payload: "https://twitter.com/blueedgetechno",
-  },
-  {
     name: "Teams",
     icon: "teams",
     type: "app",
@@ -243,6 +229,12 @@ const apps = [
     icon: "terminal",
     type: "app",
     action: "TERMINAL",
+  },
+  {
+    name: "Accounts",
+    icon: "people",
+    type: "app",
+    action: "ACCOUNTMANAGER",
   },
   {
     name: "Tips",
@@ -281,24 +273,28 @@ const apps = [
     type: "app",
   },
   {
-    name: "Github",
-    icon: "github",
+    name: "About",
+    icon: "code",
     type: "app",
-    action: "EXTERNAL",
-    payload: "https://github.com/blueedgetechno/win11React",
+    action: "ABOUT",
   },
   {
-    name: "Unescape",
-    icon: "unescape",
-    type: "action",
-    action: "EXTERNAL",
-    payload: "https://blueedge.me/unescape",
+    name: "Statistics Manager",
+    icon: "statistics",
+    type: "app",
+    action: "STATISTICS",
   },
   {
-    name: "Discord",
-    icon: "discord",
+    name: "Registry Editor",
+    icon: "registry",
     type: "app",
-    action: "DISCORD",
+    action: "REGISTRY",
+  },
+  {
+    name: "System Monitor",
+    icon: "monitor",
+    type: "app",
+    action: "SYSTEMMONITOR",
   },
 ];
 

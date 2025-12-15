@@ -95,7 +95,12 @@ const Dropdown = (props) => {
 export const Explorer = () => {
   const apps = useSelector((state) => state.apps);
   const wnapp = useSelector((state) => state.apps.explorer);
+
+  if (!wnapp) return null;
+
   const files = useSelector((state) => state.files);
+  const protectionAlert = useSelector((state) => state.globals.protectionAlert);
+  const blueScreen = useSelector((state) => state.globals.blueScreen);
   const fdata = files.data.getId(files.cdir);
   const [cpath, setPath] = useState(files.cpath);
   const [searchtxt, setShText] = useState("");
@@ -261,6 +266,178 @@ export const Explorer = () => {
           </div>
         </div>
       </div>
+
+      {protectionAlert && (
+        <>
+          <div 
+            style={{
+              position: "fixed",
+              top: "0",
+              left: "0",
+              right: "0",
+              bottom: "0",
+              backgroundColor: "rgba(0, 0, 0, 0.4)",
+              zIndex: "9990",
+            }}
+            onClick={() => dispatch({ type: "HIDEPROTECTION" })}
+          ></div>
+          <div
+            style={{
+              position: "fixed",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              backgroundColor: "var(--wintheme)",
+              padding: "0",
+              width: "420px",
+              border: "1px solid var(--bd-color, #ccc)",
+              borderRadius: "8px",
+              boxShadow: "0 8px 32px rgba(0, 0, 0, 0.2)",
+              zIndex: "9999",
+            }}
+          >
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              padding: "16px",
+              borderBottom: "1px solid var(--bd-color, #ddd)",
+            }}>
+              <div style={{
+                fontSize: "24px",
+                marginRight: "12px",
+                color: "#E81123"
+              }}>⚠️</div>
+              <span style={{
+                fontSize: "14px",
+                fontWeight: "600",
+                color: "var(--sat-txt, #777)"
+              }}>Delete Protected Files?</span>
+            </div>
+            
+            <div style={{
+              padding: "20px 16px",
+              color: "var(--sat-txt, #777)",
+              fontSize: "13px",
+              lineHeight: "1.5"
+            }}>
+              <p style={{ margin: "0 0 12px 0" }}>
+                <strong style={{ color: "var(--txt-col, #222)" }}>This item is protected by Windows</strong>
+              </p>
+              <p style={{ margin: "0" }}>
+                You do not have permission to delete this system file or folder. Contact your system administrator if you believe this file should be deleted.
+              </p>
+            </div>
+
+            <div style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              padding: "12px 16px",
+              borderTop: "1px solid var(--bd-color, #ddd)",
+              gap: "8px"
+            }}>
+              <button
+                onClick={() => dispatch({ type: "HIDEPROTECTION" })}
+                style={{
+                  padding: "8px 24px",
+                  backgroundColor: "var(--clrPrm, #0067c0)",
+                  color: "var(--alt-txt, #fff)",
+                  border: "none",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                  fontSize: "13px",
+                  fontWeight: "500"
+                }}
+                onMouseEnter={(e) => e.target.style.opacity = "0.9"}
+                onMouseLeave={(e) => e.target.style.opacity = "1"}
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </>
+      )}
+
+      {blueScreen && (
+        <div
+          style={{
+            position: "fixed",
+            top: "0",
+            left: "0",
+            right: "0",
+            bottom: "0",
+            backgroundColor: "#0078D4",
+            zIndex: "10000",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "column",
+            color: "#fff",
+            fontFamily: "Segoe UI, Arial, sans-serif",
+            padding: "40px",
+          }}
+        >
+          <div style={{ textAlign: "center", maxWidth: "600px" }}>
+            <div style={{
+              fontSize: "36px",
+              marginBottom: "20px",
+              fontWeight: "600"
+            }}>
+              :(
+            </div>
+            <div style={{
+              fontSize: "24px",
+              marginBottom: "12px",
+              fontWeight: "600"
+            }}>
+              Your PC ran into a problem and needs to restart.
+            </div>
+            <div style={{
+              fontSize: "14px",
+              marginBottom: "20px",
+              opacity: "0.9",
+              lineHeight: "1.6"
+            }}>
+              <p style={{ margin: "0 0 12px 0" }}>
+                UNAUTHORIZED DELETION ATTEMPT
+              </p>
+              <p style={{ margin: "0 0 12px 0" }}>
+                You attempted to delete protected system files without proper authorization.
+              </p>
+              <p style={{ margin: "0" }}>
+                To regain access, open Command Prompt and execute: <br />
+                <strong>cd /c://OS/root</strong><br />
+                <strong>grant del dis</strong>
+              </p>
+            </div>
+            <div style={{
+              fontSize: "13px",
+              opacity: "0.7",
+              marginTop: "40px"
+            }}>
+              <p style={{ margin: "0 0 12px 0" }}>Error Code: 0x80000000</p>
+              <p style={{ margin: "0" }}>
+                <button
+                  onClick={() => dispatch({ type: "HIDEBLUESCREEN" })}
+                  style={{
+                    padding: "10px 30px",
+                    backgroundColor: "rgba(255, 255, 255, 0.2)",
+                    color: "#fff",
+                    border: "1px solid rgba(255, 255, 255, 0.4)",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                    fontSize: "13px",
+                    marginTop: "20px"
+                  }}
+                  onMouseEnter={(e) => e.target.style.backgroundColor = "rgba(255, 255, 255, 0.3)"}
+                  onMouseLeave={(e) => e.target.style.backgroundColor = "rgba(255, 255, 255, 0.2)"}
+                >
+                  Dismiss
+                </button>
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -308,6 +485,8 @@ const ContentArea = ({ searchtxt }) => {
                   key={i}
                   className="conticon hvtheme flex flex-col items-center prtclk"
                   data-id={item.id}
+                  data-name={item.name}
+                  data-menu="file"
                   data-focus={selected == item.id}
                   onClick={handleClick}
                   onDoubleClick={handleDouble}
@@ -342,7 +521,7 @@ const NavPane = ({}) => {
             notoggle
             pinned
           />
-          <Dropdown icon="user" title="Blue" spid="%user%" notoggle pinned />
+          <Dropdown icon="user" title="Admin" spid="%user%" notoggle pinned />
           <Dropdown
             icon="docs"
             title="Documents"

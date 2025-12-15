@@ -5,6 +5,9 @@ import { useTranslation } from "react-i18next";
 
 export const Camera = () => {
   const wnapp = useSelector((state) => state.apps.camera);
+
+  if (!wnapp) return null;
+
   const hide = useSelector((state) => state.apps.camera.hide);
   const [stream, setStream] = useState(null);
   const { t } = useTranslation();

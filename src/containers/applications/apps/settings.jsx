@@ -6,8 +6,39 @@ import LangSwitch from "./assets/Langswitch";
 import "./assets/settings.scss";
 import data from "./assets/settingsData.json";
 
+const uploadProfilePicture = (dispatch) => {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  input.onchange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    try {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const imageData = event.target.result;
+        localStorage.setItem('profilePicture', imageData);
+        // Dispatch action to update Redux state
+        dispatch({
+          type: "SETPROFILEPICTURE",
+          payload: imageData,
+        });
+      };
+      reader.readAsDataURL(file);
+    } catch (error) {
+      console.error('Failed to load profile picture:', error);
+      alert('Failed to load profile picture. Please try another image.');
+    }
+  };
+  input.click();
+};
+
 export const Settings = () => {
   const wnapp = useSelector((state) => state.apps.settings);
+
+  if (!wnapp) return null;
+
   const theme = useSelector((state) => state.setting.person.theme);
   const dispatch = useDispatch();
 
@@ -17,6 +48,11 @@ export const Settings = () => {
   const [nav, setNav] = useState("");
   const [updating, setUpdating] = useState(false);
   const [upmodalOpen, setUpmodalOpen] = useState(false);
+  const [editingUsername, setEditingUsername] = useState(false);
+  const [tempUsername, setTempUsername] = useState("");
+  const [editingPassword, setEditingPassword] = useState(false);
+  const [tempPassword, setTempPassword] = useState("");
+  const [tempConfirmPassword, setTempConfirmPassword] = useState("");
 
   const themechecker = {
     default: "light",
@@ -43,6 +79,68 @@ export const Settings = () => {
   };
 
   const userName = useSelector((state) => state.setting.person.name);
+  const profilePicture = useSelector((state) => state.setting.person.picture);
+
+  const handleEditUsername = () => {
+    setEditingUsername(true);
+    setTempUsername(userName);
+  };
+
+  const handleSaveUsername = () => {
+    if (tempUsername.trim()) {
+      dispatch({
+        type: "STNGSETV",
+        payload: {
+          path: "person.name",
+          value: tempUsername,
+        },
+      });
+      setEditingUsername(false);
+    }
+  };
+
+  const handleCancelUsername = () => {
+    setEditingUsername(false);
+    setTempUsername("");
+  };
+
+  const handleEditPassword = () => {
+    setEditingPassword(true);
+    setTempPassword("");
+    setTempConfirmPassword("");
+  };
+
+  const handleSavePassword = () => {
+    if (!tempPassword.trim()) {
+      alert("Password cannot be empty");
+      return;
+    }
+
+    if (tempPassword !== tempConfirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+
+    if (tempPassword.length < 4) {
+      alert("Password must be at least 4 characters");
+      return;
+    }
+
+    dispatch({
+      type: "SETADMINPASSWORD",
+      payload: tempPassword,
+    });
+    setEditingPassword(false);
+    setTempPassword("");
+    setTempConfirmPassword("");
+    alert("Password updated successfully");
+  };
+
+  const handleCancelPassword = () => {
+    setEditingPassword(false);
+    setTempPassword("");
+    setTempConfirmPassword("");
+  };
 
   return (
     <div
@@ -68,10 +166,11 @@ export const Settings = () => {
             <div className="nav_top">
               <div className="account" onClick={() => setPage("Accounts")}>
                 <img
-                  src="img/settings/defAccount.webp"
+                  src={profilePicture || "img/settings/defAccount.webp"}
                   alt=""
                   height={60}
                   width={60}
+                  style={{ borderRadius: "50%", objectFit: "cover" }}
                 />
                 <div>
                   <p>{userName}</p>
@@ -235,14 +334,150 @@ export const Settings = () => {
                           return (
                             <div key={i} className="accountsTop ">
                               <img
-                                src="img/settings/defAccount.webp"
+                                src={profilePicture || "img/settings/defAccount.webp"}
                                 alt=""
                                 width={90}
+                                style={{ borderRadius: "50%", objectFit: "cover" }}
                               />
                               <div>
-                                <p>{userName.toUpperCase()}</p>
+                                {editingUsername ? (
+                                  <div style={{ display: "flex", gap: "8px", marginBottom: "8px" }}>
+                                    <input
+                                      type="text"
+                                      value={tempUsername}
+                                      onChange={(e) => setTempUsername(e.target.value)}
+                                      style={{
+                                        padding: "6px 10px",
+                                        border: "1px solid var(--gray1, #bbb)",
+                                        borderRadius: "4px",
+                                        background: "var(--bg1, white)",
+                                        color: "var(--txt-col, #222)",
+                                        fontSize: "13px",
+                                        flex: 1,
+                                      }}
+                                      autoFocus
+                                    />
+                                    <button
+                                      onClick={handleSaveUsername}
+                                      style={{
+                                        padding: "6px 12px",
+                                        background: "var(--clrPrm, #0067c0)",
+                                        color: "white",
+                                        border: "none",
+                                        borderRadius: "4px",
+                                        cursor: "pointer",
+                                        fontSize: "12px",
+                                      }}
+                                    >
+                                      Save
+                                    </button>
+                                    <button
+                                      onClick={handleCancelUsername}
+                                      style={{
+                                        padding: "6px 12px",
+                                        background: "var(--bg2, #f5f5f5)",
+                                        color: "var(--txt-col, #222)",
+                                        border: "1px solid var(--gray1, #bbb)",
+                                        borderRadius: "4px",
+                                        cursor: "pointer",
+                                        fontSize: "12px",
+                                      }}
+                                    >
+                                      Cancel
+                                    </button>
+                                  </div>
+                                ) : (
+                                  <>
+                                    <p style={{ cursor: "pointer", color: "var(--clrPrm, #0067c0)" }} onClick={handleEditUsername}>
+                                      {userName.toUpperCase()} (Click to edit)
+                                    </p>
+                                  </>
+                                )}
                                 <p>Local Account</p>
                                 <p>Administrator</p>
+                                <div style={{ marginTop: "16px", paddingTop: "12px", borderTop: "1px solid var(--gray1, #ddd)" }}>
+                                  <p style={{ marginBottom: "8px", fontSize: "13px", fontWeight: "500" }}>Password</p>
+                                  {editingPassword ? (
+                                    <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                                      <input
+                                        type="password"
+                                        placeholder="New password"
+                                        value={tempPassword}
+                                        onChange={(e) => setTempPassword(e.target.value)}
+                                        style={{
+                                          padding: "8px 10px",
+                                          border: "1px solid var(--gray1, #bbb)",
+                                          borderRadius: "4px",
+                                          background: "var(--bg1, white)",
+                                          color: "var(--txt-col, #222)",
+                                          fontSize: "13px",
+                                        }}
+                                        autoFocus
+                                      />
+                                      <input
+                                        type="password"
+                                        placeholder="Confirm password"
+                                        value={tempConfirmPassword}
+                                        onChange={(e) => setTempConfirmPassword(e.target.value)}
+                                        style={{
+                                          padding: "8px 10px",
+                                          border: "1px solid var(--gray1, #bbb)",
+                                          borderRadius: "4px",
+                                          background: "var(--bg1, white)",
+                                          color: "var(--txt-col, #222)",
+                                          fontSize: "13px",
+                                        }}
+                                      />
+                                      <div style={{ display: "flex", gap: "8px" }}>
+                                        <button
+                                          onClick={handleSavePassword}
+                                          style={{
+                                            padding: "6px 12px",
+                                            background: "var(--clrPrm, #0067c0)",
+                                            color: "white",
+                                            border: "none",
+                                            borderRadius: "4px",
+                                            cursor: "pointer",
+                                            fontSize: "12px",
+                                            flex: 1,
+                                          }}
+                                        >
+                                          Save
+                                        </button>
+                                        <button
+                                          onClick={handleCancelPassword}
+                                          style={{
+                                            padding: "6px 12px",
+                                            background: "var(--bg2, #f5f5f5)",
+                                            color: "var(--txt-col, #222)",
+                                            border: "1px solid var(--gray1, #bbb)",
+                                            borderRadius: "4px",
+                                            cursor: "pointer",
+                                            fontSize: "12px",
+                                            flex: 1,
+                                          }}
+                                        >
+                                          Cancel
+                                        </button>
+                                      </div>
+                                    </div>
+                                  ) : (
+                                    <button
+                                      onClick={handleEditPassword}
+                                      style={{
+                                        padding: "6px 12px",
+                                        background: "var(--clrPrm, #0067c0)",
+                                        color: "white",
+                                        border: "none",
+                                        borderRadius: "4px",
+                                        cursor: "pointer",
+                                        fontSize: "12px",
+                                      }}
+                                    >
+                                      Set/Change Password
+                                    </button>
+                                  )}
+                                </div>
                               </div>
                             </div>
                           );
@@ -316,7 +551,11 @@ export const Settings = () => {
                         case "tile square":
                         case "tile thin-blue":
                           return (
-                            <div key={e.name} className={e.type}>
+                            <div key={e.name} className={e.type} onClick={() => {
+                              if (e.name === "Upload Profile Picture") {
+                                uploadProfilePicture(dispatch);
+                              }
+                            }}>
                               <span className="settingsIcon">{e.icon}</span>
                               <div>
                                 <p>{e.name}</p>

@@ -7,6 +7,9 @@ import { Mark } from "./assets";
 
 export const WhiteBoard = () => {
   const wnapp = useSelector((state) => state.apps.board);
+
+  if (!wnapp) return null;
+
   const [color, setColor] = useState("#222222");
   const [radii, setRadii] = useState(4);
   const [eraze, setErz] = useState(false);

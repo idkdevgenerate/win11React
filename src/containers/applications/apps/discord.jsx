@@ -6,6 +6,9 @@ import WidgetBot from "@widgetbot/react-embed";
 
 export const DScord = () => {
   const wnapp = useSelector((state) => state.apps.discord);
+
+  if (!wnapp) return null;
+
   const [url, setUrl] = useState(null);
   const servers = [
     {

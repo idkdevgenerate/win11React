@@ -368,8 +368,16 @@
       "type": "tile",
       "name": "Access work or school",
       "desc": "Organisation resources like email, apps, and network",
-      "icon": ""
-    }
+      "icon": ""    },
+    {
+      "type": "subHeading",
+      "name": "Profile Settings"
+    },
+    {
+      "type": "tile",
+      "name": "Upload Profile Picture",
+      "desc": "Change your profile picture",
+      "icon": ""    }
   ],
   "Time & language": [
     {

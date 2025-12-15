@@ -9,6 +9,9 @@ import { useTranslation } from "react-i18next";
 
 export const Getstarted = () => {
   const wnapp = useSelector((state) => state.apps.getstarted);
+
+  if (!wnapp) return null;
+
   const dispatch = useDispatch();
   const tasks = useSelector((state) => state.taskbar);
   const { t } = useTranslation();

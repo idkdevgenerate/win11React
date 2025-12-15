@@ -36,6 +36,9 @@ export const MicroStore = () => {
   const apps = useSelector((state) => state.apps);
   const queryParams = new URLSearchParams(window.location.search);
   const wnapp = useSelector((state) => state.apps.store);
+
+  if (!wnapp) return null;
+
   const hide = useSelector((state) => state.apps.store.hide);
   const [tab, setTab] = useState("sthome");
   const [page, setPage] = useState(0);

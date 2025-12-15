@@ -118,6 +118,19 @@ export const delApp = (act, menu) => {
   };
 
   if (act == "delete") {
+    // Check if trying to delete protected system items
+    const itemId = menu.dataset.id;
+    const itemName = menu.textContent || "";
+    
+    const protectedItems = ["C:", "%cdrive%"];
+    const protectedFolders = ["Windows", "System32", "ProgramData", "Program Files"];
+    
+    if (protectedItems.includes(itemId) || protectedItems.includes(itemName) || 
+        protectedFolders.some(folder => itemName.includes(folder))) {
+      alert("❌ This item is protected by Windows.\n\nYou do not have permission to delete this system file or folder.");
+      return;
+    }
+
     if (data.type) {
       var apps = store.getState().apps;
       var app = Object.keys(apps).filter((x) => apps[x].action == data.type);
@@ -262,6 +275,44 @@ export const handleFileOpen = (id) => {
     if (item.type == "folder") {
       store.dispatch({ type: "FILEDIR", payload: item.id });
     }
+  }
+};
+
+export const deleteFileItem = (act, menu) => {
+  // Delete file or folder with protection for system items
+  const itemId = menu.dataset.id;
+  const itemName = menu.dataset.name || menu.textContent || "";
+  const currentState = store.getState();
+  const deletionGranted = currentState.globals.deletionGranted;
+  
+  const protectedItems = ["C:", "%cdrive%"];
+  const protectedFolders = ["Windows", "System32", "ProgramData", "Program Files", "System Volume Information"];
+  
+  // Check if trying to delete C: drive or system folders
+  if (protectedItems.includes(itemId) || protectedItems.includes(itemName) || 
+      protectedFolders.some(folder => itemName.includes(folder))) {
+    
+    // If deletion access not granted, show either protection alert or blue screen
+    if (!deletionGranted) {
+      // If it's the C: drive itself, show blue screen
+      if (protectedItems.includes(itemId) || protectedItems.includes(itemName)) {
+        store.dispatch({ type: "SHOWBLUESCREEN" });
+      } else {
+        // For system folders, show protection alert
+        store.dispatch({ type: "SHOWPROTECTION" });
+      }
+    } else {
+      // Deletion is granted, proceed with deletion
+      if (itemId) {
+        store.dispatch({ type: "FILEDEL", payload: itemId });
+      }
+    }
+    return;
+  }
+  
+  // Delete the item from the file system
+  if (itemId) {
+    store.dispatch({ type: "FILEDEL", payload: itemId });
   }
 };
 

@@ -18,49 +18,442 @@
           }
         }
       },
-      "Microsoft": {},
       "Program Files": {
+        "type": "folder",
+        "name": "Program Files",
         "data": {
-          "7-Zip": {},
-          "Adobe": {},
-          "AMD": {},
-          "BraveSoftware": {},
-          "Common Files": {},
-          "Dell": {},
-          "dotnet": {},
-          "Git": {},
-          "Goodix": {},
-          "heroku": {},
-          "Intel": {},
-          "Internet Explorer": {},
-          "mcafee": {},
-          "Microsoft Office 15": {},
-          "Microsoft OneDrive": {},
-          "Microsoft Update Health Tools": {},
-          "ModifiableWindowsApps": {},
-          "MongoDB": {},
-          "MSBuild": {},
-          "MySQL": {},
-          "nodejs": {},
-          "OpenVPN": {},
-          "PCHealthCheck": {},
-          "PowerShell": {},
-          "PowerToys": {},
-          "Realtek": {},
-          "Reference Assemblies": {},
-          "Riot Vanguard": {},
-          "Rivet Networks": {},
-          "Waves": {},
-          "Windows Defender": {},
-          "Windows Mail": {},
-          "Windows Media Player": {},
-          "Windows NT": {},
-          "Windows Photo Viewer": {},
-          "WindowsPowerShell": {},
-          "WinRAR": {}
+          "7-Zip": {
+            "type": "folder",
+            "data": {
+              "7z.exe": {},
+              "7z.dll": {},
+              "License.txt": {}
+            }
+          },
+          "Adobe": {
+            "type": "folder",
+            "data": {
+              "Acrobat DC": {
+                "type": "folder",
+                "data": {
+                  "Acrobat.exe": {},
+                  "uninstall.exe": {}
+                }
+              },
+              "Creative Cloud": {
+                "type": "folder",
+                "data": {
+                  "Creative Cloud.exe": {},
+                  "config": {}
+                }
+              }
+            }
+          },
+          "Git": {
+            "type": "folder",
+            "data": {
+              "bin": {
+                "type": "folder",
+                "data": {
+                  "git.exe": {},
+                  "bash.exe": {},
+                  "sh.exe": {}
+                }
+              },
+              "cmd": {
+                "type": "folder",
+                "data": {
+                  "git.cmd": {},
+                  "gitk.cmd": {}
+                }
+              },
+              "uninstall.exe": {}
+            }
+          },
+          "Microsoft Visual Studio": {
+            "type": "folder",
+            "data": {
+              "2022": {
+                "type": "folder",
+                "data": {
+                  "Community": {
+                    "type": "folder",
+                    "data": {
+                      "Common7": {},
+                      "MSBuild": {},
+                      "VC": {}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "Python311": {
+            "type": "folder",
+            "data": {
+              "python.exe": {},
+              "pythonw.exe": {},
+              "Scripts": {
+                "type": "folder",
+                "data": {
+                  "pip.exe": {},
+                  "pip3.exe": {}
+                }
+              },
+              "Lib": {
+                "type": "folder",
+                "data": {
+                  "site-packages": {}
+                }
+              }
+            }
+          },
+          "nodejs": {
+            "type": "folder",
+            "data": {
+              "node.exe": {},
+              "npm.cmd": {},
+              "node_modules": {}
+            }
+          },
+          "Google": {
+            "type": "folder",
+            "data": {
+              "Chrome": {
+                "type": "folder",
+                "data": {
+                  "Application": {
+                    "type": "folder",
+                    "data": {
+                      "chrome.exe": {},
+                      "chrome_proxy.exe": {},
+                      "Locales": {}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "Mozilla Firefox": {
+            "type": "folder",
+            "data": {
+              "firefox.exe": {},
+              "browser": {},
+              "plugins": {}
+            }
+          },
+          "Microsoft Office": {
+            "type": "folder",
+            "data": {
+              "root": {
+                "type": "folder",
+                "data": {
+                  "Office16": {
+                    "type": "folder",
+                    "data": {
+                      "EXCEL.EXE": {},
+                      "WINWORD.EXE": {},
+                      "POWERPNT.EXE": {},
+                      "OUTLOOK.EXE": {}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "VideoLAN": {
+            "type": "folder",
+            "data": {
+              "VLC": {
+                "type": "folder",
+                "data": {
+                  "vlc.exe": {},
+                  "plugins": {}
+                }
+              }
+            }
+          },
+          "WinRAR": {
+            "type": "folder",
+            "data": {
+              "WinRAR.exe": {},
+              "UnRAR.exe": {},
+              "UninstallRAR.exe": {}
+            }
+          },
+          "Common Files": {
+            "type": "folder",
+            "data": {
+              "Adobe": {},
+              "Microsoft Shared": {},
+              "Oracle": {}
+            }
+          },
+          "Windows Defender": {
+            "type": "folder",
+            "data": {
+              "MpCmdRun.exe": {},
+              "Platform": {}
+            }
+          }
         }
       },
-      "temp": {},
+      "Program Files (x86)": {
+        "type": "folder",
+        "name": "Program Files (x86)",
+        "data": {
+          "Intel": {
+            "type": "folder",
+            "data": {
+              "iCLS Client": {}
+            }
+          },
+          "Common Files": {
+            "type": "folder",
+            "data": {
+              "Adobe": {},
+              "Microsoft Shared": {}
+            }
+          },
+          "Windows Portable Devices": {
+            "type": "folder",
+            "data": {
+              "sqmapi.dll": {}
+            }
+          }
+        }
+      },
+      "Windows": {
+        "type": "folder",
+        "name": "Windows",
+        "data": {
+          "System32": {
+            "type": "folder",
+            "data": {
+              "drivers": {
+                "type": "folder",
+                "data": {
+                  "etc": {}
+                }
+              },
+              "config": {
+                "type": "folder",
+                "data": {
+                  "SAM": {},
+                  "SECURITY": {},
+                  "SOFTWARE": {},
+                  "SYSTEM": {}
+                }
+              },
+              "cmd.exe": {},
+              "notepad.exe": {},
+              "explorer.exe": {},
+              "powershell.exe": {},
+              "services.exe": {},
+              "wininit.exe": {},
+              "winlogon.exe": {},
+              "svchost.exe": {}
+            }
+          },
+          "SysWOW64": {
+            "type": "folder",
+            "data": {
+              "cmd.exe": {},
+              "notepad.exe": {}
+            }
+          },
+          "Temp": {
+            "type": "folder",
+            "data": {
+              "tmp_file_1.tmp": {},
+              "tmp_file_2.tmp": {}
+            }
+          },
+          "Fonts": {
+            "type": "folder",
+            "data": {
+              "arial.ttf": {},
+              "times.ttf": {},
+              "cour.ttf": {}
+            }
+          },
+          "INF": {
+            "type": "folder",
+            "data": {}
+          },
+          "Logs": {
+            "type": "folder",
+            "data": {
+              "CBS": {}
+            }
+          },
+          "Media": {
+            "type": "folder",
+            "data": {
+              "Windows Error.wav": {},
+              "Windows Startup.wav": {}
+            }
+          },
+          "Prefetch": {
+            "type": "folder",
+            "data": {}
+          },
+          "Tasks": {
+            "type": "folder",
+            "data": {
+              "Microsoft": {
+                "type": "folder",
+                "data": {
+                  "Windows": {}
+                }
+              }
+            }
+          },
+          "Web": {
+            "type": "folder",
+            "data": {
+              "Screen": {},
+              "Wallpaper": {}
+            }
+          },
+          "Assets": {
+            "type": "folder",
+            "name": "Assets",
+            "data": {
+              "SystemIcons": {
+                "type": "folder",
+                "name": "SystemIcons",
+                "data": {
+                  "settings.ico": {},
+                  "folder.ico": {},
+                  "document.ico": {},
+                  "application.ico": {},
+                  "system.ico": {},
+                  "disk.ico": {},
+                  "network.ico": {},
+                  "printer.ico": {},
+                  "trash.ico": {},
+                  "user.ico": {},
+                  "computer.ico": {},
+                  "library.ico": {},
+                  "search.ico": {},
+                  "help.ico": {},
+                  "warning.ico": {},
+                  "error.ico": {},
+                  "info.ico": {},
+                  "question.ico": {},
+                  "security.ico": {},
+                  "shield.ico": {}
+                }
+              },
+              "AppIcons": {
+                "type": "folder",
+                "name": "AppIcons",
+                "data": {
+                  "office_word.ico": {},
+                  "office_excel.ico": {},
+                  "office_powerpoint.ico": {},
+                  "office_outlook.ico": {},
+                  "notepad.ico": {},
+                  "calculator.ico": {},
+                  "mspaint.ico": {},
+                  "snip.ico": {},
+                  "maps.ico": {},
+                  "photos.ico": {},
+                  "movies.ico": {},
+                  "music.ico": {},
+                  "defender.ico": {},
+                  "firewall.ico": {},
+                  "antivirus.ico": {},
+                  "update.ico": {},
+                  "store.ico": {},
+                  "edge.ico": {},
+                  "chrome.ico": {},
+                  "firefox.ico": {}
+                }
+              },
+              "ThemeIcons": {
+                "type": "folder",
+                "name": "ThemeIcons",
+                "data": {
+                  "light.ico": {},
+                  "dark.ico": {},
+                  "auto.ico": {},
+                  "blue.ico": {},
+                  "green.ico": {},
+                  "red.ico": {},
+                  "purple.ico": {},
+                  "pink.ico": {},
+                  "gold.ico": {},
+                  "silver.ico": {}
+                }
+              },
+              "StatusIcons": {
+                "type": "folder",
+                "name": "StatusIcons",
+                "data": {
+                  "online.ico": {},
+                  "offline.ico": {},
+                  "away.ico": {},
+                  "busy.ico": {},
+                  "idle.ico": {},
+                  "connecting.ico": {},
+                  "sync.ico": {},
+                  "error.ico": {},
+                  "warning.ico": {},
+                  "success.ico": {}
+                }
+              }
+            }
+          }
+        }
+      },
+      "ProgramData": {
+        "type": "folder",
+        "name": "ProgramData",
+        "data": {
+          "Microsoft": {
+            "type": "folder",
+            "data": {
+              "Windows": {
+                "type": "folder",
+                "data": {
+                  "Start Menu": {},
+                  "Shortcuts": {}
+                }
+              },
+              "Windows Defender": {},
+              "Windows Search": {}
+            }
+          },
+          "Adobe": {
+            "type": "folder",
+            "data": {
+              "Common": {},
+              "Update": {}
+            }
+          },
+          "Kaspersky": {},
+          "Package Cache": {}
+        }
+      },
+      "System Volume Information": {
+        "type": "folder",
+        "name": "System Volume Information",
+        "data": {
+          "$RECYCLE.BIN": {},
+          "RestorePoint": {}
+        }
+      },
+      "temp": {
+        "type": "folder",
+        "name": "temp",
+        "data": {
+          "cache": {},
+          "download": {},
+          "logs": {}
+        }
+      },
       "Users": {
         "type": "folder",
         "name": "Users",
@@ -74,9 +467,9 @@
               "Public Videos": {}
             }
           },
-          "Blue": {
+          "Admin": {
             "type": "folder",
-            "name": "Blue",
+            "name": "Admin",
             "info": {
               "spid": "%user%",
               "icon": "user"

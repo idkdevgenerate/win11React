@@ -19,6 +19,10 @@ const defState = {
       width: "310px",
       secwid: "200px",
     },
+    file: {
+      width: "280px",
+      secwid: "170px",
+    },
   },
   menus: {
     desk: [
@@ -131,7 +135,7 @@ const defState = {
         name: "Open in Terminal",
         icon: "terminal",
         action: "OPENTERM",
-        payload: "C:\\Users\\Blue\\Desktop",
+        payload: "C:\\Users\\Admin\\Desktop",
       },
       {
         name: "About",
@@ -242,6 +246,51 @@ const defState = {
         name: "Delete",
         action: "delApp",
         payload: "delete",
+      },
+    ],
+    file: [
+      {
+        name: "Open",
+        action: "handleFileOpen",
+        payload: null,
+      },
+      {
+        name: "Open with",
+        dsb: true,
+      },
+      {
+        type: "hr",
+      },
+      {
+        name: "Cut",
+        dsb: true,
+      },
+      {
+        name: "Copy",
+        dsb: true,
+      },
+      {
+        name: "Copy as path",
+        dsb: true,
+      },
+      {
+        type: "hr",
+      },
+      {
+        name: "Rename",
+        dsb: true,
+      },
+      {
+        name: "Delete",
+        action: "deleteFileItem",
+        payload: "file",
+      },
+      {
+        type: "hr",
+      },
+      {
+        name: "Properties",
+        dsb: true,
       },
     ],
   },

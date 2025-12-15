@@ -17,10 +17,22 @@ const defState = {
     },
   },
   person: {
-    name: "Blue Edge",
+    name: "Admin",
     theme: "light",
     color: "blue",
+    picture: null,
+    password: "",
   },
+  accounts: [
+    {
+      id: "admin",
+      username: "Admin",
+      password: "",
+      type: "Admin Account",
+      picture: null,
+    },
+  ],
+  currentAccountId: "admin",
   devices: {
     bluetooth: false,
   },
@@ -71,9 +83,45 @@ const settReducer = (state = defState, action) => {
       changed = true;
       tmpState = changeVal(tmpState, action.payload.path, action.payload.value);
       break;
+    case "SETPROFILEPICTURE":
+      changed = true;
+      tmpState.person.picture = action.payload;
+      break;
+    case "CREATEACCOUNT":
+      changed = true;
+      const newAccount = {
+        id: action.payload.username.toLowerCase().replace(/\s+/g, ""),
+        username: action.payload.username,
+        password: action.payload.password,
+        type: action.payload.type,
+        picture: null,
+      };
+      tmpState.accounts.push(newAccount);
+      break;
+    case "SWITCHACCOUNT":
+      changed = true;
+      const accountToSwitch = tmpState.accounts.find(acc => acc.id === action.payload);
+      if (accountToSwitch) {
+        tmpState.currentAccountId = action.payload;
+        tmpState.person.name = accountToSwitch.username;
+        tmpState.person.picture = accountToSwitch.picture;
+      }
+      break;
+    case "DELETEACCOUNT":
+      changed = true;
+      tmpState.accounts = tmpState.accounts.filter(acc => acc.id !== action.payload);
+      break;
     case "SETTLOAD":
       changed = true;
       tmpState = { ...action.payload };
+      break;
+    case "SETADMINPASSWORD":
+      changed = true;
+      const accountIndex = tmpState.accounts.findIndex(acc => acc.id === tmpState.currentAccountId);
+      if (accountIndex !== -1) {
+        tmpState.accounts[accountIndex].password = action.payload;
+        tmpState.person.password = action.payload;
+      }
       break;
     case "TOGGAIRPLNMD":
       changed = true;

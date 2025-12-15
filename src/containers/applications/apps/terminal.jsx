@@ -9,8 +9,12 @@ import dirs from "./assets/dir.json";
 
 export const WnTerminal = () => {
   const wnapp = useSelector((state) => state.apps.terminal);
+  const userName = useSelector((state) => state.setting.person.name);
+  
+  if (!wnapp) return null;
+  
   const [stack, setStack] = useState(["OS [Version 10.0.22000.51]", ""]);
-  const [pwd, setPwd] = useState("C:\\Users\\Blue");
+  const [pwd, setPwd] = useState(`C:\\Users\\${userName}`);
   const [lastCmd, setLsc] = useState(0);
   const [wntitle, setWntitle] = useState("Terminal");
 
@@ -83,9 +87,13 @@ export const WnTerminal = () => {
         var AppName = arg[0];
         var IframeUrl = arg[1];
         var IconUrl = arg[2];
+        
+        // Use store icon as default for installed apps (separate from terminal)
+        var finalIcon = IconUrl || "store";
+        
         var Json = {
           name: AppName,
-          icon: IconUrl,
+          icon: finalIcon,
           type: "game",
           data: {
             type: "IFrame",
@@ -135,7 +143,12 @@ export const WnTerminal = () => {
         var errp = true;
         var curr = pwd == "C:\\" ? [] : pwd.replace("C:\\", "").split("\\");
 
-        if (arg == ".") {
+        // Check for special OS root path
+        if (arg.toLowerCase() === "/c://OS/root") {
+          setPwd("C:\\OS\\root");
+          errp = false;
+          tmpStack.push("Access to system directory granted. Type 'grant del dis' to enable C: deletion.");
+        } else if (arg == ".") {
           errp = false;
         } else if (arg == "..") {
           errp = false;
@@ -270,28 +283,28 @@ export const WnTerminal = () => {
     } else if (type == "title") {
       setWntitle(arg.length ? arg : "Terminal");
     } else if (type == "hostname") {
-      tmpStack.push("blue");
+      tmpStack.push(userName.toLowerCase());
     } else if (type == "login") {
       login();
       tmpStack.push("started login");
     } else if (type == "lang-test") {
       i18next.changeLanguage("fr-FR");
       tmpStack.push("French");
-    } else if (type == "blue") {
-      tmpStack.push("blueedgetechno");
+    } else if (type == "whoami") {
+      tmpStack.push(userName);
     } else if (type == "dev") {
       tmpStack.push("https://dev.blueedge.me/");
     } else if (type == "ver") {
       tmpStack.push("OS [Version 10.0.22000.51]");
     } else if (type == "systeminfo") {
       var dvInfo = [
-        "Host Name:                 BLUE",
+        `Host Name:                 ${userName.toUpperCase()}`,
         "OS Name:                   Win11React Dummys Edition",
         "OS Version:                10.0.22000 N/A Build 22000.51",
         "OS Manufacturer:           ",
         "OS Configuration:          Standalone Workstation",
         "OS Build Type:             Multiprocessor Free",
-        "Registered Owner:          Blue",
+        `Registered Owner:          ${userName}`,
         "Registered Organization:   N/A",
         "Product ID:                7H1S1-5AP1R-473DV-3R5I0N",
       ];
@@ -299,6 +312,19 @@ export const WnTerminal = () => {
       for (var i = 0; i < dvInfo.length; i++) {
         tmpStack.push(dvInfo[i]);
       }
+    } else if (type == "grant" && arg.toLowerCase() === "del dis") {
+      // Check if user is in the OS root directory
+      if (pwd.toLowerCase() === "c:\\os\\root") {
+        dispatch({ type: "GRANTDELETION" });
+        tmpStack.push("SUCCESS: C: drive deletion access granted.");
+        tmpStack.push("You can now delete files from C: drive without system protection alerts.");
+      } else {
+        tmpStack.push("ERROR: Access denied. You must be in C:\\OS\\root to grant deletion access.");
+      }
+    } else if (type === "c:/users" && arg.toLowerCase() === "par dis create acc") {
+      // Open account manager window
+      dispatch({ type: "ACCOUNTMANAGER", payload: "full" });
+      tmpStack.push("Opening Accounts Manager...");
     } else if (type == "help") {
       var helpArr = [
         "CD             Displays the name of or changes the current directory.",
@@ -308,13 +334,16 @@ export const WnTerminal = () => {
         "DIR            Displays a list of files and subdirectories in a directory.",
         "ECHO           Displays messages, or turns command echoing on or off.",
         "EXIT           Quits the CMD.EXE program (command interpreter).",
+        "GRANT          Grant deletion access with: grant del dis",
         "HELP           Provides Help information for Windows commands.",
+        "HOSTNAME       Displays the computer host name.",
         "START          Starts a separate window to run a specified program or command.",
         "SYSTEMINFO     Displays machine specific properties and configuration.",
         "TIME           Displays or sets the system time.",
         "TITLE          Sets the window title for a CMD.EXE session.",
         "TYPE           Displays the contents of a text file.",
         "VER            Displays the Windows version.",
+        "WHOAMI         Displays current user name.",
         "PYTHON         EXECUTE PYTHON CODE.",
         "EVAL           RUNS JavaScript statements.",
         "INSTALL        Instal a app with app name and iframe url",

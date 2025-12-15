@@ -4,6 +4,9 @@ import { Icon, ToolBar } from "../../../utils/general";
 
 export const Calculator = () => {
   const wnapp = useSelector((state) => state.apps.calculator);
+
+  if (!wnapp) return null;
+
   const [equa, setEqua] = useState([]);
   const [cval, setCval] = useState("0");
   const [err, setErr] = useState(null);

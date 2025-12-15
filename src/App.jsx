@@ -5,6 +5,9 @@ import "./i18nextConf";
 import "./index.css";
 
 import ActMenu from "./components/menu";
+import { AccountCreation } from "./components/AccountCreation";
+import { Activation } from "./components/Activation";
+import AppErrorBoundary from "./components/AppErrorBoundary";
 import {
   BandPane,
   CalnWid,
@@ -126,6 +129,8 @@ function App() {
     dispatch({ type: "WALLBOOTED" });
   };
 
+  const showAccountCreation = useSelector((state) => state.globals.showAccountCreation);
+
   useEffect(() => {
     if (!window.onstart) {
       loadSettings();
@@ -141,13 +146,19 @@ function App() {
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         {!wall.booted ? <BootScreen dir={wall.dir} /> : null}
         {wall.locked ? <LockScreen dir={wall.dir} /> : null}
+        <AccountCreation isOpen={showAccountCreation} />
+        <Activation />
         <div className="appwrap">
           <Background />
           <div className="desktop" data-menu="desk">
             <DesktopApp />
             {Object.keys(Applications).map((key, idx) => {
               var WinApp = Applications[key];
-              return <WinApp key={idx} />;
+              return (
+                <AppErrorBoundary key={idx}>
+                  <WinApp />
+                </AppErrorBoundary>
+              );
             })}
             {Object.keys(apps)
               .filter((x) => x != "hz")
@@ -155,7 +166,11 @@ function App() {
               .map((app, i) => {
                 if (app.pwa) {
                   var WinApp = Drafts[app.data.type];
-                  return <WinApp key={i} icon={app.icon} {...app.data} />;
+                  return (
+                    <AppErrorBoundary key={i}>
+                      <WinApp icon={app.icon} {...app.data} />
+                    </AppErrorBoundary>
+                  );
                 }
               })}
             <StartMenu />

@@ -20,6 +20,9 @@ String.prototype.to250 = function () {
 
 export const Spotify = () => {
   const wnapp = useSelector((state) => state.apps.spotify);
+
+  if (!wnapp) return null;
+
   const [tab, setTab] = useState(0);
   const [paused, setPause] = useState(true);
   const [shfle, setShuffle] = useState(0);

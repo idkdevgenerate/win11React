@@ -73,9 +73,15 @@ export const LockScreen = (props) => {
   const [password, setPass] = useState("");
   const [passType, setType] = useState(1);
   const [forgot, setForget] = useState(false);
+  const [showAccounts, setShowAccounts] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
   const dispatch = useDispatch();
 
   const userName = useSelector((state) => state.setting.person.name);
+  const accounts = useSelector((state) => state.setting.accounts);
+  const currentAccountId = useSelector((state) => state.setting.currentAccountId);
+  const profilePicture = useSelector((state) => state.setting.person.picture);
+  const adminPassword = useSelector((state) => state.setting.person.password);
 
   const action = (e) => {
     var act = e.target.dataset.action,
@@ -98,6 +104,19 @@ export const LockScreen = (props) => {
   };
 
   const proceed = () => {
+    // If admin password is set, validate it
+    if (adminPassword && adminPassword.length > 0) {
+      if (!password) {
+        setPasswordError("Password required");
+        return;
+      }
+      if (password !== adminPassword) {
+        setPasswordError("Incorrect password");
+        setPass("");
+        return;
+      }
+    }
+    
     setUnLock(true);
     setTimeout(() => {
       dispatch({ type: "WALLUNLOCK" });
@@ -136,18 +155,158 @@ export const LockScreen = (props) => {
         </div>
       </div>
       <div className="fadeinScreen" data-faded={!lock} data-unlock={unlocked}>
-        <Image
-          className="rounded-full overflow-hidden"
-          src="img/asset/prof.jpg"
-          w={200}
-          ext
-        />
+        {profilePicture ? (
+          <img
+            src={profilePicture}
+            alt={userName}
+            width={200}
+            height={200}
+            style={{
+              borderRadius: "50%",
+              objectFit: "cover",
+              border: "4px solid rgba(255, 255, 255, 0.3)"
+            }}
+          />
+        ) : (
+          <Image
+            className="rounded-full overflow-hidden"
+            src="img/asset/prof.jpg"
+            w={200}
+            ext
+          />
+        )}
         <div className="mt-2 text-2xl font-medium text-gray-200">
           {userName}
         </div>
-        <div className="flex items-center mt-6 signInBtn" onClick={proceed}>
-          Sign in
-        </div>
+        
+        {adminPassword && adminPassword.length > 0 ? (
+          <div style={{ marginTop: "24px", width: "100%", maxWidth: "300px" }}>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => {
+                setPass(e.target.value);
+                setPasswordError("");
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") proceed();
+              }}
+              placeholder="Enter password"
+              style={{
+                width: "100%",
+                padding: "10px 12px",
+                backgroundColor: "rgba(255, 255, 255, 0.15)",
+                border: "1px solid rgba(255, 255, 255, 0.3)",
+                borderRadius: "4px",
+                color: "white",
+                fontSize: "14px",
+                marginBottom: "8px",
+                outline: "none",
+                boxSizing: "border-box"
+              }}
+              onFocus={(e) => {
+                e.target.style.backgroundColor = "rgba(255, 255, 255, 0.2)";
+                e.target.style.borderColor = "rgba(255, 255, 255, 0.5)";
+              }}
+              onBlur={(e) => {
+                e.target.style.backgroundColor = "rgba(255, 255, 255, 0.15)";
+                e.target.style.borderColor = "rgba(255, 255, 255, 0.3)";
+              }}
+            />
+            {passwordError && (
+              <div style={{
+                color: "#ff6b6b",
+                fontSize: "12px",
+                marginBottom: "8px",
+                textAlign: "center"
+              }}>
+                {passwordError}
+              </div>
+            )}
+            <button
+              onClick={proceed}
+              style={{
+                width: "100%",
+                padding: "10px 12px",
+                backgroundColor: "rgba(0, 120, 212, 0.9)",
+                border: "none",
+                borderRadius: "4px",
+                color: "white",
+                fontSize: "14px",
+                cursor: "pointer",
+                transition: "background-color 0.2s"
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = "rgba(0, 120, 212, 1)";
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = "rgba(0, 120, 212, 0.9)";
+              }}
+            >
+              Unlock
+            </button>
+          </div>
+        ) : (
+          <div className="flex items-center mt-6 signInBtn" onClick={proceed}>
+            Sign in
+          </div>
+        )}
+        {accounts && accounts.length > 1 && (
+          <div 
+            className="text-xs text-gray-400 mt-4 handcr"
+            onClick={() => setShowAccounts(!showAccounts)}
+            style={{
+              cursor: "pointer",
+              padding: "8px 12px",
+              borderRadius: "4px",
+              backgroundColor: "rgba(255, 255, 255, 0.1)",
+              display: "inline-block"
+            }}
+          >
+            {showAccounts ? "Hide other accounts" : "Change account"}
+          </div>
+        )}
+        
+        {showAccounts && (
+          <div style={{
+            marginTop: "16px",
+            backgroundColor: "rgba(0, 0, 0, 0.3)",
+            padding: "12px",
+            borderRadius: "8px",
+            maxHeight: "250px",
+            overflowY: "auto"
+          }}>
+            {accounts && accounts.map((account) => (
+              <div
+                key={account.id}
+                onClick={() => {
+                  dispatch({ type: "SWITCHACCOUNT", payload: account.id });
+                  setShowAccounts(false);
+                }}
+                style={{
+                  padding: "10px",
+                  marginBottom: "8px",
+                  backgroundColor: currentAccountId === account.id ? "rgba(255, 255, 255, 0.2)" : "rgba(255, 255, 255, 0.1)",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                  color: "rgba(255, 255, 255, 0.9)",
+                  fontSize: "13px",
+                  border: currentAccountId === account.id ? "1px solid rgba(255, 255, 255, 0.4)" : "1px solid transparent",
+                  transition: "all 0.2s"
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = "rgba(255, 255, 255, 0.15)";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = currentAccountId === account.id ? "rgba(255, 255, 255, 0.2)" : "rgba(255, 255, 255, 0.1)";
+                }}
+              >
+                <div style={{ fontWeight: "500" }}>{account.username}</div>
+                <div style={{ fontSize: "11px", opacity: "0.7" }}>{account.type}</div>
+              </div>
+            ))}
+          </div>
+        )}
         {/*   <input type={passType?"text":"password"} value={password} onChange={action}
               data-action="inpass" onKeyDown={action2} placeholder={passType?"Password":"PIN"}/>
           <Icon className="-ml-6 handcr" fafa="faArrowRight" width={14}

@@ -1,4 +1,10 @@
 const defState = {
+  protectionAlert: false,
+  blueScreen: false,
+  deletionGranted: false,
+  showAccountCreation: false,
+  isActivated: false,
+  showActivationWarning: true,
   lays: [
     [
       {
@@ -208,7 +214,34 @@ const defState = {
 };
 
 const globalReducer = (state = defState, action) => {
-  return state;
+  var tmpState = { ...state };
+  
+  if (action.type === "SHOWPROTECTION") {
+    tmpState.protectionAlert = true;
+  } else if (action.type === "HIDEPROTECTION") {
+    tmpState.protectionAlert = false;
+  } else if (action.type === "SHOWBLUESCREEN") {
+    tmpState.blueScreen = true;
+  } else if (action.type === "HIDEBLUESCREEN") {
+    tmpState.blueScreen = false;
+  } else if (action.type === "GRANTDELETION") {
+    tmpState.deletionGranted = true;
+  } else if (action.type === "REVOKEDELETION") {
+    tmpState.deletionGranted = false;
+  } else if (action.type === "SHOWACCOUNTCREATION") {
+    tmpState.showAccountCreation = true;
+  } else if (action.type === "HIDEACCOUNTCREATION") {
+    tmpState.showAccountCreation = false;
+  } else if (action.type === "ACTIVATEWINDOWS") {
+    tmpState.isActivated = true;
+    tmpState.showActivationWarning = false;
+  } else if (action.type === "SHOWACTIVATIONWARNING") {
+    tmpState.showActivationWarning = true;
+  } else if (action.type === "HIDEACTIVATIONWARNING") {
+    tmpState.showActivationWarning = false;
+  }
+  
+  return tmpState;
 };
 
 export default globalReducer;

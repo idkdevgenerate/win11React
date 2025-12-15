@@ -149,6 +149,13 @@ const appReducer = (state = defState, action) => {
             tmpState.hz += 1;
             obj.z = tmpState.hz;
           }
+        } else {
+          // Default: open app when no payload or unrecognized payload
+          obj.size = "full";
+          obj.hide = false;
+          obj.max = true;
+          tmpState.hz += 1;
+          obj.z = tmpState.hz;
         }
 
         tmpState[keys[i]] = obj;

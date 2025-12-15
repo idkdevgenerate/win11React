@@ -106,6 +106,7 @@ export const StartMenu = () => {
   }, [query]);
 
   const userName = useSelector((state) => state.setting.person.name);
+  const profilePicture = useSelector((state) => state.setting.person.picture);
 
   return (
     <div
@@ -261,14 +262,28 @@ export const StartMenu = () => {
           </div>
           <div className="menuBar">
             <div className="profile handcr">
-              <Icon
-                src="blueProf"
-                ui
-                rounded
-                width={26}
-                click="EXTERNAL"
-                payload="https://blueedge.me"
-              />
+              {profilePicture ? (
+                <img
+                  src={profilePicture}
+                  style={{
+                    width: "26px",
+                    height: "26px",
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                    cursor: "pointer",
+                  }}
+                  alt="Profile"
+                />
+              ) : (
+                <Icon
+                  src="blueProf"
+                  ui
+                  rounded
+                  width={26}
+                  click="EXTERNAL"
+                  payload="https://blueedge.me"
+                />
+              )}
               <div className="usName">{userName}</div>
             </div>
             <div className="relative powerMenu">
